@@ -6,6 +6,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +82,7 @@ public class OpcionesAdapter extends RecyclerView.Adapter<OpcionesAdapter.ViewHo
 
 
             op.setText(opcion.getAnswerText());
+            //Cuando se presiona una opcion, se manda al post
             votar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
@@ -93,7 +96,7 @@ public class OpcionesAdapter extends RecyclerView.Adapter<OpcionesAdapter.ViewHo
                                     @Override
                                     public void onResponse(String response)
                                     {
-
+                                        Log.d("TAG", "onResponse: "+ response);
                                     }
                                 },
                                 new Response.ErrorListener()
@@ -105,12 +108,15 @@ public class OpcionesAdapter extends RecyclerView.Adapter<OpcionesAdapter.ViewHo
                                 }
                         )
                         {
+                            //Se mandan los parametros necesarios por el body
                             @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
+                            public byte[] getBody() throws AuthFailureError {
                                 Map<String,String> param = new HashMap<>();
                                 param.put("iduser",String.valueOf(idUser));
                                 param.put("idanswer",String.valueOf(opcion.getId()));
-                                return param;
+                                Gson gson = new Gson();
+                                String json = gson.toJson(param);
+                                return json.getBytes();
                             }
                         };
                         requestQueue.add(stringRequest);
