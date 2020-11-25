@@ -103,6 +103,7 @@ public class LogueoFragment extends Fragment {
                                 Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
 
+
                             } catch (JSONException e) {
                                 Toast.makeText(getActivity().getApplicationContext(), "Server error", Toast.LENGTH_LONG).show();
                             }

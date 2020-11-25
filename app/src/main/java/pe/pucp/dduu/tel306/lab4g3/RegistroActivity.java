@@ -3,6 +3,7 @@ package pe.pucp.dduu.tel306.lab4g3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -26,6 +27,10 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class RegistroActivity extends AppCompatActivity {
@@ -34,6 +39,10 @@ public class RegistroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+    }
+    public void abriLogin(View view){
+        Intent intent = new Intent(this , MainActivity.class );
+        startActivity(intent);
     }
     public void registrarUsuario(View view){
         if (tengoInternet()) {
@@ -47,6 +56,8 @@ public class RegistroActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
                             Log.d("infoWS", response);
+
+
                         }
                     },
                     new Response.ErrorListener() {
@@ -81,6 +92,20 @@ public class RegistroActivity extends AppCompatActivity {
                     String json = gson.toJson(parametros);
                     byte[] retorno = json.getBytes();
                     Log.d("JSON", json);
+
+
+                    //GUARDAR
+                    try(FileOutputStream fileOutputStream = openFileOutput("archivoREGISTRO.txt", Context.MODE_PRIVATE);
+                        FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
+                    ) {
+                        fileWriter.write(json);
+                        Log.d("infoApp","escritura exitosa");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
 
                     return retorno;
                 }

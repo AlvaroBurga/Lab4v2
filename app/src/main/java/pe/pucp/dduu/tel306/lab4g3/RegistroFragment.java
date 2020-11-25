@@ -1,6 +1,7 @@
 package pe.pucp.dduu.tel306.lab4g3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -80,6 +81,8 @@ public class RegistroFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_registro, container, false);
+    }
+    public void abriLogin(View view){
     }
 
     public void registrarUsuario(final View view){

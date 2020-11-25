@@ -28,6 +28,11 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //hola
-        //Adios
     }
     public void abriRegistro(View view){
         Intent intent = new Intent(this , RegistroActivity.class );
@@ -55,8 +58,19 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             try{
                                 JSONObject usuario = new JSONObject(response);
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                                //FALTA GUARDAR
+                                Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_LONG).show();
+
+                                // GUARDAR
+                                try(FileOutputStream fileOutputStream = openFileOutput("archivoLOGIN.txt", Context.MODE_PRIVATE);
+                                    FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
+                                ) {
+                                    fileWriter.write(response);
+                                    Log.d("infoApp","escritura exitosa");
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
 
 
                             } catch (JSONException e) {
@@ -69,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
-                            Log.d("error",error.getMessage());
+                            Log.d("error","AAAAAAAAAAAAAAAAA");
                         }
                     }) {
                 @Override
