@@ -12,6 +12,8 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,47 +46,38 @@ public class PreguntasActivity extends AppCompatActivity {
 
         //Validar JSON
         Boolean encontroArchivo;
-        try(FileInputStream fileInputStream = openFileInput("registro.json");
-            FileReader fileReader = new FileReader(fileInputStream.getFD());
-            BufferedReader bufferedReader = new BufferedReader(fileReader); )
-        {
+        try (FileInputStream fileInputStream = openFileInput("registro.json");
+             FileReader fileReader = new FileReader(fileInputStream.getFD());
+             BufferedReader bufferedReader = new BufferedReader(fileReader);) {
             String json = bufferedReader.readLine();
-            usuario =  gson.fromJson(json,Usuario.class);
-            encontroArchivo=true;
+            usuario = gson.fromJson(json, Usuario.class);
+            encontroArchivo = true;
 
         } catch (IOException e) {
             e.printStackTrace();
-            encontroArchivo=false;
+            encontroArchivo = false;
         }
 
-        if (encontroArchivo)
-        {
+        if (encontroArchivo) {
             //Ver si ya respondio pregunta
-            if(tengoInternet())
-            {
+            if (tengoInternet()) {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String url = "http://34.236.191.118:3000/api/v1/answers/detail?questionid="+idPreg+"&userid="+usuario.getId();
+                String url = "http://34.236.191.118:3000/api/v1/answers/detail?questionid=" + idPreg + "&userid=" + usuario.getId();
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new Response.Listener<String>()
-                        {
+                        new Response.Listener<String>() {
                             @Override
-                            public void onResponse(String response)
-                            {
+                            public void onResponse(String response) {
                                 Boolean respuesta = Boolean.parseBoolean(response);
-                                if(respuesta)
-                                {
+                                if (respuesta) {
                                     //Presentar estadisticas
                                     estadisticas(idPreg);
-                                }
-                                else
-                                {
+                                } else {
                                     //Dar opciones
                                     opciones(idPreg);
                                 }
                             }
                         },
-                        new Response.ErrorListener()
-                        {
+                        new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
@@ -93,52 +86,42 @@ public class PreguntasActivity extends AppCompatActivity {
                 );
                 requestQueue.add(stringRequest);
             }
-        }
-        else
-        {
-            Intent intent = new Intent(this,MainActivity.class);
+        } else {
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }
 
-    public void estadisticas(int preg)
-    {
-        if(tengoInternet())
-        {
+    public void estadisticas(int preg) {
+        if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid="+preg; //Se considera que el correo es el id
+            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid=" + preg; //Se considera que el correo es el id
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>()
-                    {
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(String response)
-                        {
+                        public void onResponse(String response) {
                             //Se obtienen las estadisticas
-                            Stats stats = gson.fromJson(response,Stats.class);
-                            int respuestas=0;
+                            Stats stats = gson.fromJson(response, Stats.class);
+                            int respuestas = 0;
                             //Se cuenta el numero total de respuestas
-                            for (AnswerStats i:stats.getAnswerstats())
-                            {
-                                respuestas=+i.getCount();
+                            for (AnswerStats i : stats.getAnswerstats()) {
+                                respuestas = +i.getCount();
                             }
-                            if (respuestas==0)
-                            {
+                            if (respuestas == 0) {
                                 //No hay forma que se llegue si no se tiene respuestas
-                                Toast.makeText(getApplicationContext(), "No debio llegar aqui",Toast.LENGTH_SHORT);
-                            }
-                            else {
+                                Toast.makeText(getApplicationContext(), "No debio llegar aqui", Toast.LENGTH_SHORT);
+                            } else {
                                 //Primero se calculan las estadisticas por opcion
                                 int l = stats.getAnswerstats().length;
                                 double[] estadisticas = new double[l];
-                                int cont=0;
-                                for (AnswerStats i : stats.getAnswerstats())
-                                {
+                                int cont = 0;
+                                for (AnswerStats i : stats.getAnswerstats()) {
                                     //Es la division entre el numero de cuentas de la opcion entre el total de respuestas
-                                    estadisticas[cont]=(i.getCount()*1.0/respuestas);
+                                    estadisticas[cont] = (i.getCount() * 1.0 / respuestas);
                                     cont++;
                                 }
                                 //Se crea el fragment de estadisticas
-                                EstadisticasFragment estadisticasFragment = EstadisticasFragment.newInstance(stats,estadisticas);
+                                EstadisticasFragment estadisticasFragment = EstadisticasFragment.newInstance(stats, estadisticas);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 fragmentTransaction.addToBackStack(null);
@@ -147,8 +130,7 @@ public class PreguntasActivity extends AppCompatActivity {
                             }
                         }
                     },
-                    new Response.ErrorListener()
-                    {
+                    new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
@@ -160,32 +142,27 @@ public class PreguntasActivity extends AppCompatActivity {
         }
     }
 
-    public void opciones(int preg)
-    {
-        if(tengoInternet())
-        {
+    public void opciones(int preg) {
+        if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/questions/"+preg;
+            String url = "http://34.236.191.118:3000/api/v1/questions/" + preg;
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>()
-                    {
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(String response)
-                        {
+                        public void onResponse(String response) {
                             //Mostrarle el fragment de opciones con parametro de el arreglo de answers
                             Pregunta pregunta = gson.fromJson(response, Pregunta.class);
                             //Se crea el fragmento
-                            OpcionesFragment opcionesFragment = OpcionesFragment.newInstance(pregunta,usuario.getId());
+                            OpcionesFragment opcionesFragment = OpcionesFragment.newInstance(pregunta, usuario.getId());
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.add(R.id.fragmentContainerx,opcionesFragment);
+                            fragmentTransaction.add(R.id.fragmentContainerx, opcionesFragment);
                             fragmentTransaction.commit();
 
                         }
                     },
-                    new Response.ErrorListener()
-                    {
+                    new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
@@ -196,6 +173,60 @@ public class PreguntasActivity extends AppCompatActivity {
         }
     }
 
+
+    public void preguntas(View view) {
+        if (tengoInternet()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String url = "http://34.236.191.118:3000/api/v1/questions";
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("infoWS", response);
+                            Gson gson = new Gson();
+                            Pregunta[] listaPreguntas = gson.fromJson(response, Pregunta[].class);
+                            PreguntaFragment preguntasFragment = PreguntaFragment.newInstance(listaPreguntas);
+                            FragmentManager supportFragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.fragmentContainerx, preguntasFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+
+
+            requestQueue.add(stringRequest);
+        }
+    }
+
+
+        /* HAY QUE VER COMO CERRAR EL FRAGMENTO DE PREGUNTAS Y OBTENER EL ID DEL QUE SE CLICKEO
+
+         public void detallesPregunta(View view){
+        TextView textView2 = view.findViewById(R.id.textView2);
+        String id = textView2.getText().toString();
+        Log.d("ID", id);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        PreguntasFragment preguntasFragment = (PreguntasFragment) fragmentManager.findFragmentById(R.id.fragmentContainer);
+
+        if (preguntasFragment != null){
+
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(preguntasFragment);
+            fragmentTransaction.commit();
+
+        }
+    }
+        */
 
 
     public boolean tengoInternet() {

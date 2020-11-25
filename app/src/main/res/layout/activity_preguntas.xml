@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".PreguntasActivity">
 
+    <Button
+        android:id="@+id/buttonPreguntas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="preguntas"
+        android:text="@string/mostrar_preguntas"
+        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerx"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/fragmentContainerx"
+        app:layout_constraintTop_toTopOf="@+id/fragmentContainerx" />
+
     <FrameLayout
         android:id="@+id/fragmentContainerx"
         android:layout_width="409dp"

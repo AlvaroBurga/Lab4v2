@@ -14,4 +14,6 @@
     <string name="textview">TextView</string>
     <string name="votar">Votar</string>
     <string name="pregunta">Pregunta</string>
+    <string name="mostrar_preguntas">Mostrar Preguntas</string>
+    <string name="textview">TextView</string>
 </resources>
