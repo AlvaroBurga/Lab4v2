@@ -3,7 +3,6 @@ package pe.pucp.dduu.tel306.lab4g3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -20,7 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -29,39 +27,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity {
     Gson gson = new Gson();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //hola
-        //Adios
+        setContentView(R.layout.activity_registro);
     }
-    public void abriRegistro(View view){
-        Intent intent = new Intent(this , RegistroActivity.class );
-        startActivity(intent);
-    }
-    public void validarUsuario(View view){
+    public void registrarUsuario(View view){
         if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/users/login";
+            String url = " http://34.236.191.118:3000/api/v1/users/new";
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            try{
-                                JSONObject usuario = new JSONObject(response);
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                                //FALTA GUARDAR
+                            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
-
-                            } catch (JSONException e) {
-                                Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_LONG).show();
-                            }
                             Log.d("infoWS", response);
                         }
                     },
@@ -87,8 +71,12 @@ public class MainActivity extends AppCompatActivity {
                     editText = findViewById(R.id.username);
                     String email = editText.getText().toString();
 
+                    editText = findViewById(R.id.name);
+                    String name = editText.getText().toString();
+
                     parametros.put("password", password);
                     parametros.put("email", email);
+                    parametros.put("name", name);
 
                     String json = gson.toJson(parametros);
                     byte[] retorno = json.getBytes();
@@ -101,11 +89,6 @@ public class MainActivity extends AppCompatActivity {
             requestQueue.add(stringRequest);
         }
     }
-
-    public void validarInternet(View view) {
-       Toast.makeText(this,tengoInternet()?"Si tengo internet":"No tengo internet", Toast.LENGTH_SHORT).show();
-    }
-
     public boolean tengoInternet() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -144,5 +127,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 }
