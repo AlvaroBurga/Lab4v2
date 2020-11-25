@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".RegistroActivity"></activity>
-        <activity android:name=".PreguntasActivity" />
+        <activity android:name=".ListaPreguntaActiviy"></activity>
+        <activity android:name=".RegistroActivity" />
+        <activity android:name=".DetallesPreguntaActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

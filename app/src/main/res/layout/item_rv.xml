@@ -7,16 +7,23 @@
     android:onClick="retorno">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/preguntaLista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:onClick="detallesPregunta"
-        android:text="@string/textview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/pregunta"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:focusable="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/seleccionarPregunta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/seleccionar"
+        app:layout_constraintBottom_toBottomOf="@+id/preguntaLista"
+        app:layout_constraintStart_toEndOf="@+id/preguntaLista"
+        app:layout_constraintTop_toTopOf="@+id/preguntaLista" />
 </androidx.constraintlayout.widget.ConstraintLayout>

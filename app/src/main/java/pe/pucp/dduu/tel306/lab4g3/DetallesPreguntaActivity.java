@@ -34,7 +34,7 @@ import pe.pucp.dduu.tel306.lab4g3.Entities.Pregunta;
 import pe.pucp.dduu.tel306.lab4g3.Entities.Stats;
 import pe.pucp.dduu.tel306.lab4g3.Entities.Usuario;
 
-public class PreguntasActivity extends AppCompatActivity {
+public class DetallesPreguntaActivity extends AppCompatActivity {
     Usuario usuario;
     Gson gson = new Gson();
     int idPreg;
@@ -59,43 +59,52 @@ public class PreguntasActivity extends AppCompatActivity {
         }
 
         if (encontroArchivo) {
+            Intent intent2 = getIntent();
+            //Se obtiene el id de la pregunta
+            idPreg=intent2.getIntExtra("idPreg",0);
             //Ver si ya respondio pregunta
-            if (tengoInternet()) {
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String url = "http://34.236.191.118:3000/api/v1/answers/detail?questionid=" + idPreg + "&userid=" + usuario.getId();
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Boolean respuesta = Boolean.parseBoolean(response);
-                                if (respuesta) {
-                                    //Presentar estadisticas
-                                    estadisticas(idPreg);
-                                } else {
-                                    //Dar opciones
-                                    opciones(idPreg);
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                error.printStackTrace();
-                            }
-                        }
-                );
-                requestQueue.add(stringRequest);
-            }
+            detallesPregunta();
         } else {
+            //Si no esta el archivo va al logueo
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        }
+    }
+
+    public void detallesPregunta()
+    {
+        if (tengoInternet()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String url = "http://34.236.191.118:3000/api/v1/answers/detail?questionid=" + idPreg + "&userid=" + usuario.getId();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Boolean respuesta = Boolean.parseBoolean(response);
+                            if (respuesta) {
+                                //Presentar estadisticas
+                                estadisticas(idPreg);
+                            } else {
+                                //Dar opciones
+                                opciones(idPreg);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    }
+            );
+            requestQueue.add(stringRequest);
         }
     }
 
     public void estadisticas(int preg) {
         if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid=" + preg; //Se considera que el correo es el id
+            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid=" + preg; 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
@@ -142,6 +151,8 @@ public class PreguntasActivity extends AppCompatActivity {
         }
     }
 
+
+
     public void opciones(int preg) {
         if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -172,62 +183,6 @@ public class PreguntasActivity extends AppCompatActivity {
             requestQueue.add(stringRequest);
         }
     }
-
-
-    public void preguntas(View view) {
-        if (tengoInternet()) {
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/questions";
-
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("infoWS", response);
-                            Gson gson = new Gson();
-                            Pregunta[] listaPreguntas = gson.fromJson(response, Pregunta[].class);
-                            PreguntaFragment preguntasFragment = PreguntaFragment.newInstance(listaPreguntas);
-                            FragmentManager supportFragmentManager = getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
-                            fragmentTransaction.add(R.id.fragmentContainerx, preguntasFragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-
-
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    });
-
-
-            requestQueue.add(stringRequest);
-        }
-    }
-
-
-        /* HAY QUE VER COMO CERRAR EL FRAGMENTO DE PREGUNTAS Y OBTENER EL ID DEL QUE SE CLICKEO
-
-         public void detallesPregunta(View view){
-        TextView textView2 = view.findViewById(R.id.textView2);
-        String id = textView2.getText().toString();
-        Log.d("ID", id);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        PreguntasFragment preguntasFragment = (PreguntasFragment) fragmentManager.findFragmentById(R.id.fragmentContainer);
-
-        if (preguntasFragment != null){
-
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(preguntasFragment);
-            fragmentTransaction.commit();
-
-        }
-    }
-        */
-
 
     public boolean tengoInternet() {
         ConnectivityManager connectivityManager =

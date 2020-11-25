@@ -29,6 +29,7 @@ public class PreguntaFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
+    //Se pasa la lista como parametro
     public static PreguntaFragment newInstance(Pregunta[] listaPreguntas) {
         PreguntaFragment fragment = new PreguntaFragment();
         Bundle args = new Bundle();
@@ -40,6 +41,7 @@ public class PreguntaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Se añade como atributo
         listaPreguntas = (Pregunta[]) getArguments().getSerializable("listaPreguntas");
     }
 
@@ -47,10 +49,11 @@ public class PreguntaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //Se obtiene la vista
         View view = inflater.inflate(R.layout.fragment_pregunta, container, false);
 
-
-        PreguntaAdapter adapter = new PreguntaAdapter(listaPreguntas, getActivity().getApplicationContext());
+        //Se crea el recycler view para la lista de preguntas
+        PreguntaAdapter adapter = new PreguntaAdapter(listaPreguntas, getActivity());
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
