@@ -2,10 +2,10 @@ package pe.pucp.dduu.tel306.lab4g3.Entities;
 
 import java.io.Serializable;
 
-public class Stats implements Serializable {
+public class Pregunta implements Serializable {
     private int id;
     private String questionText;
-    private AnswerStats[] answerstats;
+    private Answer[] answers;
 
     public int getId() {
         return id;
@@ -23,11 +23,11 @@ public class Stats implements Serializable {
         this.questionText = questionText;
     }
 
-    public AnswerStats[] getAnswerstats() {
-        return answerstats;
+    public Answer[] getAnswers() {
+        return answers;
     }
 
-    public void setAnswerstats(AnswerStats[] answerstats) {
-        this.answerstats = answerstats;
+    public void setAnswers(Answer[] answers) {
+        this.answers = answers;
     }
 }
