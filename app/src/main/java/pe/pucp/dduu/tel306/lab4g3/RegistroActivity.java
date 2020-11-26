@@ -57,6 +57,34 @@ public class RegistroActivity extends AppCompatActivity {
 
                             Log.d("infoWS", response);
 
+                            if(response.equals("true")){
+                                HashMap<String, String> parametros = new HashMap<>();
+                                EditText editText = findViewById(R.id.password);
+                                String password = editText.getText().toString();
+
+                                editText = findViewById(R.id.username);
+                                String email = editText.getText().toString();
+
+                                editText = findViewById(R.id.name);
+                                String name = editText.getText().toString();
+
+                                parametros.put("password", password);
+                                parametros.put("email", email);
+                                parametros.put("name", name);
+                                String json = gson.toJson(parametros);
+                                //GUARDAR
+                                try(FileOutputStream fileOutputStream = openFileOutput("archivoREGISTRO.txt", Context.MODE_PRIVATE);
+                                    FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
+                                ) {
+                                    fileWriter.write(json);
+                                    Log.d("infoApp","escritura exitosa");
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
 
                         }
                     },
@@ -94,17 +122,7 @@ public class RegistroActivity extends AppCompatActivity {
                     Log.d("JSON", json);
 
 
-                    //GUARDAR
-                    try(FileOutputStream fileOutputStream = openFileOutput("registro.txt", Context.MODE_PRIVATE);
-                        FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
-                    ) {
-                        fileWriter.write(json);
-                        Log.d("infoApp","escritura exitosa");
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
 
 
                     return retorno;
