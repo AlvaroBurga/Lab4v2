@@ -1,6 +1,8 @@
 package pe.pucp.dduu.tel306.lab4g3.Entities;
 
-public class AnswerStats {
+import java.io.Serializable;
+
+public class AnswerStats implements Serializable {
     private Answer answer;
     private int count;
 

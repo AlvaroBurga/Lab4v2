@@ -37,9 +37,12 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.opcion=opciones[position];
+        AnswerStats opcion=opciones[position];
+        double porcentaje = porcentajes[position];
         holder.context=context;
-        holder.porcentaje=porcentajes[position];
+        holder.opcionTv.setText(opcion.getAnswer().getAnswerText());
+        String porcentajeS = String.valueOf(porcentaje)+ "%";
+        holder.porcentajeTv.setText(porcentajeS);
     }
 
     @Override
@@ -49,17 +52,15 @@ public class EstadisticasAdapter extends RecyclerView.Adapter<EstadisticasAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        AnswerStats opcion;
         Context context;
-        double porcentaje;
+        TextView opcionTv;
+        TextView porcentajeTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            TextView opcionTv = itemView.findViewById(R.id.opcionStat);
+            opcionTv = itemView.findViewById(R.id.opcionStat);
             //Se asigna la opcion y su respectivo porcentaje a cada elemento del recycler view
-            TextView porcentajeTv = itemView.findViewById(R.id.porcentaje);
-            opcionTv.setText(opcion.getAnswer().getAnswerText() + " -> ");
-            porcentajeTv.setText(String.valueOf(porcentaje)+ "%");
+            porcentajeTv = itemView.findViewById(R.id.porcentaje);
         }
     }
 }

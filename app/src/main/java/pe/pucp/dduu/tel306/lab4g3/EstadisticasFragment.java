@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,14 @@ public class EstadisticasFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        stats=(Stats) getArguments().getSerializable("stats");
-        estadisticas = getArguments().getDoubleArray("estadisticas");
+        if (getArguments()!=null) //Por alguna razon devuelve null
+        {
+            estadisticas = getArguments().getDoubleArray("estadisticas");
+            stats=(Stats) getArguments().getSerializable("stats");
+        }
+
+
+
     }
 
     @Override
@@ -47,6 +54,7 @@ public class EstadisticasFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_respuestas, container, false);
         //Se pone el titulo
         TextView titulo = view.findViewById(R.id.TituloStat);
+        Log.d("TAG2", "onCreateView: "+"aqui");
         titulo.setText(stats.getQuestionText());
         //Se pone el recycler view
         EstadisticasAdapter estadisticasAdapter = new EstadisticasAdapter(stats.getAnswerstats(),estadisticas,getActivity());

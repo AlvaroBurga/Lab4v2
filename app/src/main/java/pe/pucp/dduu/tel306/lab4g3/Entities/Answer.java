@@ -1,6 +1,8 @@
 package pe.pucp.dduu.tel306.lab4g3.Entities;
 
-public class Answer {
+import java.io.Serializable;
+
+public class Answer implements Serializable {
     private int id;
     private String answerText;
 

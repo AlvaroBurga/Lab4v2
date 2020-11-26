@@ -114,7 +114,7 @@ public class DetallesPreguntaActivity extends AppCompatActivity {
                             int respuestas = 0;
                             //Se cuenta el numero total de respuestas
                             for (AnswerStats i : stats.getAnswerstats()) {
-                                respuestas = +i.getCount();
+                                respuestas += i.getCount();
                             }
                             if (respuestas == 0) {
                                 //No hay forma que se llegue si no se tiene respuestas
@@ -126,16 +126,18 @@ public class DetallesPreguntaActivity extends AppCompatActivity {
                                 int cont = 0;
                                 for (AnswerStats i : stats.getAnswerstats()) {
                                     //Es la division entre el numero de cuentas de la opcion entre el total de respuestas
-                                    estadisticas[cont] = (i.getCount() * 1.0 / respuestas);
+                                    estadisticas[cont] = (i.getCount() * 100.0 / respuestas);
                                     cont++;
                                 }
                                 //Se crea el fragment de estadisticas
+                                Log.d("TAG1", "onResponse: aqui llego");
                                 EstadisticasFragment estadisticasFragment = EstadisticasFragment.newInstance(stats, estadisticas);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                                 fragmentTransaction.addToBackStack(null);
                                 fragmentTransaction.add(R.id.fragmentContainerx, estadisticasFragment);
                                 fragmentTransaction.commit();
+                                Log.d("TAG12", "onResponse: aqui llego");
                             }
                         }
                     },
