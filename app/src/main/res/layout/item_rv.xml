@@ -17,13 +17,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/seleccionarPregunta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/seleccionar"
-        app:layout_constraintBottom_toBottomOf="@+id/preguntaLista"
-        app:layout_constraintStart_toEndOf="@+id/preguntaLista"
-        app:layout_constraintTop_toTopOf="@+id/preguntaLista" />
 </androidx.constraintlayout.widget.ConstraintLayout>

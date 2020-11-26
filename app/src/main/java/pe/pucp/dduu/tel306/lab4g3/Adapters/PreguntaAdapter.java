@@ -1,6 +1,7 @@
 package pe.pucp.dduu.tel306.lab4g3.Adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +38,16 @@ public class PreguntaAdapter extends RecyclerView.Adapter<PreguntaAdapter.Pregun
 
     @Override
     public void onBindViewHolder(@NonNull PreguntaAdapter.PreguntaViewHolder holder, int position) {
+        Log.d("TAG", "onBindViewHolder: "+"llego aqui");
         holder.activity = activity;
         Pregunta pregunta = preguntas[position];
+        holder.pregunta = pregunta;
+        holder.textView.setText(pregunta.getQuestionText());
     }
 
     @Override
     public int getItemCount() {
+        Log.d("TAG", "count: "+"llego aqui");
         return preguntas.length;
     }
 
@@ -50,13 +55,13 @@ public class PreguntaAdapter extends RecyclerView.Adapter<PreguntaAdapter.Pregun
 
         public Activity activity;
         public Pregunta pregunta;
+        public TextView textView;
 
         public PreguntaViewHolder(View itemview) {
             super(itemview);
-            TextView textView = itemview.findViewById(R.id.preguntaLista);
-            Button seleccionar = itemview.findViewById(R.id.seleccionarPregunta);
-            textView.setText(pregunta.getQuestionText());
-            seleccionar.setOnClickListener(new View.OnClickListener() {
+            textView = itemview.findViewById(R.id.preguntaLista);
+            Log.d("TAG", "holder: "+"llego aqui");
+            textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int id = pregunta.getId();

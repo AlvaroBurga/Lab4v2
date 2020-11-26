@@ -56,7 +56,7 @@ public class PreguntaFragment extends Fragment {
         PreguntaAdapter adapter = new PreguntaAdapter(listaPreguntas, getActivity());
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
 }

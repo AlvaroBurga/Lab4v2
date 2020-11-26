@@ -95,7 +95,7 @@ public class RegistroActivity extends AppCompatActivity {
 
 
                     //GUARDAR
-                    try(FileOutputStream fileOutputStream = openFileOutput("archivoREGISTRO.txt", Context.MODE_PRIVATE);
+                    try(FileOutputStream fileOutputStream = openFileOutput("registro.txt", Context.MODE_PRIVATE);
                         FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
                     ) {
                         fileWriter.write(json);

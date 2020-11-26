@@ -46,7 +46,7 @@ public class DetallesPreguntaActivity extends AppCompatActivity {
 
         //Validar JSON
         Boolean encontroArchivo;
-        try (FileInputStream fileInputStream = openFileInput("registro.json");
+        try (FileInputStream fileInputStream = openFileInput("registro.txt");
              FileReader fileReader = new FileReader(fileInputStream.getFD());
              BufferedReader bufferedReader = new BufferedReader(fileReader);) {
             String json = bufferedReader.readLine();

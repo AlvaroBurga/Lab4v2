@@ -28,13 +28,18 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import pe.pucp.dduu.tel306.lab4g3.Entities.Usuario;
 
 public class MainActivity extends AppCompatActivity {
     Gson gson = new Gson();
@@ -42,7 +47,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolean encontroArchivo = false;
+        try (FileInputStream fileInputStream = openFileInput("registro.txt");
+             FileReader fileReader = new FileReader(fileInputStream.getFD());
+             BufferedReader bufferedReader = new BufferedReader(fileReader);) {
+            String json = bufferedReader.readLine();
+            Usuario usuario = gson.fromJson(json, Usuario.class);
+            encontroArchivo = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            encontroArchivo = false;
+        }
+
+        //esto valida que si existe el archivo se redirija
+        if(encontroArchivo)
+        {
+            Intent intent = new Intent(this, ListaPreguntaActiviy.class);
+            startActivity(intent);
+        }
     }
+
+
     public void abriRegistro(View view){
         Intent intent = new Intent(this , RegistroActivity.class );
         startActivity(intent);
@@ -61,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Login exitoso", Toast.LENGTH_LONG).show();
 
                                 // GUARDAR
-                                try(FileOutputStream fileOutputStream = openFileOutput("archivoLOGIN.txt", Context.MODE_PRIVATE);
+                                try(FileOutputStream fileOutputStream = openFileOutput("registro.txt", Context.MODE_PRIVATE);
                                     FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());
                                 ) {
                                     fileWriter.write(response);
@@ -71,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                Intent intent = new Intent(getApplicationContext(),ListaPreguntaActiviy.class);
+                                startActivity(intent);
 
 
                             } catch (JSONException e) {
