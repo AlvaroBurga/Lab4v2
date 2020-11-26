@@ -104,7 +104,7 @@ public class DetallesPreguntaActivity extends AppCompatActivity {
     public void estadisticas(int preg) {
         if (tengoInternet()) {
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid=" + preg;
+            String url = "http://34.236.191.118:3000/api/v1/answers/stats?questionid=" + preg; 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
